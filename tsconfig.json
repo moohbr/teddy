@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true, /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    "strictBindCallApply": true, /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
+    "removeComments": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@infrastructure/*": [
+        "./infrastructure/*"
+      ],
+      "@domain/*": [
+        "./domain/*"
+      ],
+      "@config/*": [
+        "./config/*"
+      ],
+      "@base/*": [
+        "./base/*"
+      ]
+    },
+    "outDir": "./dist"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
