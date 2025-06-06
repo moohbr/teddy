@@ -7,12 +7,28 @@ import { DependencyInstanciatedError } from "@base/errors/dependency-not-instanc
 // Use Cases
 // Url
 import { CreateUrlUseCase } from "@domain/use-case/url/create-a-url";
+import { GetAllByUserIdUseCase } from "@domain/use-case/url/get-all-by-user-id";
+// User
+import { CreateUserUseCase } from "@domain/use-case/user/create";
+import { UpdateUserUseCase } from "@domain/use-case/user/update";
+import { DeleteUserUseCase } from "@domain/use-case/user/delete";
+import { LoginUseCase } from "@domain/use-case/user/login";
 // Controllers
 // Url
 import { CreateUrlController } from "@infrastructure/http/controllers/url/create";
 import type { DependencyMap } from "./dependencies";
 import { RedirectUrlController } from "@infrastructure/http/controllers/root/redirect";
 import { FindUrlByShortIdUseCase } from "@domain/use-case/url/find-by-short-id";
+import { GetAllByUserIdController } from "@infrastructure/http/controllers/url/get-all-by-userId";
+// User
+import { UserRepository } from "@infrastructure/datasource/databases/drizzle/repositories/user";
+import { CreateUserController } from "@infrastructure/http/controllers/user/create";
+import { UpdateUserController } from "@infrastructure/http/controllers/user/update";
+import { DeleteUserController } from "@infrastructure/http/controllers/user/delete";
+import { LoginUserController } from "@infrastructure/http/controllers/user/login";
+// Services
+import { AuthService } from "@domain/services/auth";
+import { AuthMiddleware } from "@infrastructure/http/middlewares/auth";
 
 export class DIContainer {
   private static instance: DIContainer;
@@ -38,9 +54,13 @@ export class DIContainer {
 
   private registerRepositories(): void {
     this.register("UrlRepository", new URLRepository(db));
+    this.register("UserRepository", new UserRepository(db));
   }
 
-  private registerServices(): void { }
+  private registerServices(): void {
+    this.register("AuthService", new AuthService());
+    this.register("AuthMiddleware", new AuthMiddleware(this.get("AuthService")));
+  }
 
   private registerUseCases(): void {
     this.register("CreateUrlUseCase", new CreateUrlUseCase(
@@ -48,6 +68,22 @@ export class DIContainer {
     ));
     this.register("FindByShortIdUseCase", new FindUrlByShortIdUseCase(
       this.get("UrlRepository")
+    ));
+    this.register("CreateUserUseCase", new CreateUserUseCase(
+      this.get("UserRepository")
+    ));
+    this.register("UpdateUserUseCase", new UpdateUserUseCase(
+      this.get("UserRepository")
+    ));
+    this.register("DeleteUserUseCase", new DeleteUserUseCase(
+      this.get("UserRepository")
+    ));
+    this.register("GetAllByUserIdUseCase", new GetAllByUserIdUseCase(
+      this.get("UrlRepository")
+    ));
+    this.register("LoginUserUseCase", new LoginUseCase(
+      this.get("UserRepository"),
+      this.get("AuthService")
     ));
   }
 
@@ -58,7 +94,21 @@ export class DIContainer {
     this.register("RedirectUrlController", new RedirectUrlController(
       this.get("FindByShortIdUseCase")
     ));
-
+    this.register("CreateUserController", new CreateUserController(
+      this.get("CreateUserUseCase")
+    ));
+    this.register("UpdateUserController", new UpdateUserController(
+      this.get("UpdateUserUseCase")
+    ));
+    this.register("DeleteUserController", new DeleteUserController(
+      this.get("DeleteUserUseCase")
+    ));
+    this.register("LoginUserController", new LoginUserController(
+      this.get("LoginUserUseCase")
+    ));
+    this.register("GetAllByUserIdController", new GetAllByUserIdController(
+      this.get("GetAllByUserIdUseCase")
+    ));
   }
 
   public get<K extends keyof DependencyMap>(key: K): DependencyMap[K] {

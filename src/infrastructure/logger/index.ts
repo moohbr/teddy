@@ -49,7 +49,7 @@ const isProduction = process.env.NODE_ENV === "production";
 export const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || (isProduction ? "warn" : "debug"),
   defaultMeta: {
-    service: "tech4humans",
+    service: "url-shortener",
     environment: process.env.NODE_ENV || "development",
   },
   transports: [

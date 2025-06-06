@@ -1,0 +1,17 @@
+meta {
+  name: Shortner
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/v1/url
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "originalUrl": "https://www.google.com"
+  }
+}

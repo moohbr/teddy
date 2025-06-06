@@ -3,9 +3,10 @@ import type { URLRepositoryInterface } from "@domain/entities/url/repositories";
 import { OriginalUrl } from "@domain/entities/url/value-objects/original-url";
 import { ShortId } from "@domain/entities/url/value-objects/short-id";
 import type { URLRawEntity } from "@domain/entities/url/entity/types";
-import { eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { urlsTable } from "../models/url";
 import type { DatabaseType } from "../types";
+import { UserId } from "@domain/entities/user/value-objects/id";
 
 
 export class URLRepository implements URLRepositoryInterface {
@@ -30,7 +31,7 @@ export class URLRepository implements URLRepositoryInterface {
     const [url] = await this.db
       .select()
       .from(urlsTable)
-      .where(eq(urlsTable.shortId, shortId.getValue()))
+      .where(and(eq(urlsTable.shortId, shortId.getValue()), eq(urlsTable.active, true)))
       .limit(1);
 
     if (!url) return null;
@@ -47,7 +48,7 @@ export class URLRepository implements URLRepositoryInterface {
     const [url] = await this.db
       .select()
       .from(urlsTable)
-      .where(eq(urlsTable.originalUrl, originalUrl.getValue()))
+      .where(and(eq(urlsTable.originalUrl, originalUrl.getValue()), eq(urlsTable.active, true)))
       .limit(1);
 
     if (!url) return null;
@@ -63,7 +64,7 @@ export class URLRepository implements URLRepositoryInterface {
     const [url] = await this.db
       .select()
       .from(urlsTable)
-      .where(eq(urlsTable.shortId, shortId.getValue()))
+      .where(and(eq(urlsTable.shortId, shortId.getValue()), eq(urlsTable.active, true)))
 
     if (!url) return null;
 
@@ -73,5 +74,28 @@ export class URLRepository implements URLRepositoryInterface {
     }
 
     return URLEntity.reconstruct(reconstructedData);
+  }
+
+  public async findAllByUserId(userId: UserId): Promise<URLEntity[]> {
+    const urls = await this.db
+      .select()
+      .from(urlsTable)
+      .where(and(eq(urlsTable.userId, userId.getValue()), eq(urlsTable.active, true)))
+      .orderBy(desc(urlsTable.count));
+
+    return urls.map(url => {
+      const reconstructedData: URLRawEntity = {
+        shortId: ShortId.reconstruct(url.shortId),
+        originalUrl: OriginalUrl.reconstruct(url.originalUrl)
+      };
+      return URLEntity.reconstruct(reconstructedData);
+    });
+  }
+
+  public async deleteByShortId(shortId: ShortId): Promise<void> {
+    await this.db
+      .update(urlsTable)
+      .set({ active: false })
+      .where(eq(urlsTable.shortId, shortId.getValue()));
   }
 }

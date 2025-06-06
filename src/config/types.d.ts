@@ -9,6 +9,8 @@ declare global {
       DATABASE_URL: string;
       APP_PORT: number;
       APP_HOST: string;
+      JWT_SECRET: string;
+      JWT_EXPIRES_IN: string;
     }
   }
 }

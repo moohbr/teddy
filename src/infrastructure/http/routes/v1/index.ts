@@ -1,5 +1,6 @@
 import { BaseRouter } from "@base/infrastructure/honojs/router";
 import { UrlRouter } from "./url";
+import { UserRouter } from "./user";
 
 export class V1Router extends BaseRouter {
   private static instance: V1Router;
@@ -17,6 +18,7 @@ export class V1Router extends BaseRouter {
 
   protected setupRoutes(): void {
     this.router.route("/url", UrlRouter.getInstance().getRouter());
+    this.router.route("/user", UserRouter.getInstance().getRouter());
   }
 }
 

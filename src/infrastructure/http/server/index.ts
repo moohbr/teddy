@@ -34,7 +34,7 @@ export class Server implements IServer {
     })
 
     this.app.onError((err, c) => {
-      console.error('Unhandled error:', err)
+      winston.error('Unhandled error:', err)
       return c.json({ message: 'Internal Server Error' }, 500)
     })
 

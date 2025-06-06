@@ -1,0 +1,15 @@
+meta {
+  name: Get Link
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/{{ID}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  ID: bbszzs
+}
