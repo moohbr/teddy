@@ -1,28 +1,26 @@
-import { UserEmail } from "../value-objects/email";
-import { UserId } from "../value-objects/id";
-import { UserName } from "../value-objects/name";
-import { UserPassword } from "../value-objects/password";
-import { UserRawEntity } from "./types";
-import { Entity } from "@base/domain/entity/entity";
+import { Entity } from '@base/domain/entity/entity';
 
+import { UserRawEntity } from './types';
+import { UserEmail } from '../value-objects/email';
+import { UserId } from '../value-objects/id';
+import { UserName } from '../value-objects/name';
+import { UserPassword } from '../value-objects/password';
 
-export class UserEntity extends Entity<UserRawEntity> { 
+export class UserEntity extends Entity<UserRawEntity> {
   private constructor(props: UserRawEntity) {
     super(props);
   }
 
   public static create(
-    props: Pick<UserRawEntity, "name" | "email" | "passwordHash"> & { id?: UserId },
+    props: Pick<UserRawEntity, 'name' | 'email' | 'passwordHash'> & { id?: UserId },
   ): UserEntity {
-    return new UserEntity(
-      {
-        id: props.id,
-        name: props.name,
-        email: props.email,
-        createdAt: new Date(),
-        passwordHash: props.passwordHash,
-      }
-    );
+    return new UserEntity({
+      id: props.id,
+      name: props.name,
+      email: props.email,
+      createdAt: new Date(),
+      passwordHash: props.passwordHash,
+    });
   }
 
   public static reconstruct(
@@ -32,15 +30,13 @@ export class UserEntity extends Entity<UserRawEntity> {
     createdAt: Date,
     passwordHash: string,
   ): UserEntity {
-    return new UserEntity(
-      {
-        id: UserId.create(id),
-        name: UserName.create(name),
-        email: UserEmail.create(email),
-        createdAt: createdAt,
-        passwordHash: UserPassword.create(passwordHash),
-      }
-    );
+    return new UserEntity({
+      id: UserId.create(id),
+      name: UserName.create(name),
+      email: UserEmail.create(email),
+      createdAt: createdAt,
+      passwordHash: UserPassword.create(passwordHash),
+    });
   }
 
   public getId(): UserId {
@@ -64,6 +60,6 @@ export class UserEntity extends Entity<UserRawEntity> {
   }
 
   public toPersistence(): UserRawEntity {
-   return this.props;
+    return this.props;
   }
 }

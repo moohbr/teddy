@@ -1,6 +1,7 @@
-import { ValueObject } from "../../../../base/domain/entity/value-object";
-import { URLSchema } from "../schemas";
-import { z } from "zod";
+import { z } from 'zod';
+
+import { ValueObject } from '../../../../base/domain/entity/value-object';
+import { URLSchema } from '../schemas';
 
 export class OriginalUrl extends ValueObject<z.infer<typeof URLSchema.originalUrl>> {
   public static create(value: unknown): OriginalUrl {

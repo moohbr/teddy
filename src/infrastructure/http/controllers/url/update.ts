@@ -1,9 +1,10 @@
-import type { Context } from "hono";
-import { logger } from "@infrastructure/logger";
-import { BaseHonoJSController } from "@base/infrastructure/honojs/controller";
-import { UpdateUrlUseCaseInterface } from "@domain/use-case/url/update-a-url/interface";
-import { UpdateUrlRequest } from "@domain/use-case/url/update-a-url/request";
-import { NotAuthorizedError } from "@base/errors/not-authorized-error";
+import type { Context } from 'hono';
+
+import { NotAuthorizedError } from '@base/errors/not-authorized-error';
+import { BaseHonoJSController } from '@base/infrastructure/honojs/controller';
+import { UpdateUrlUseCaseInterface } from '@domain/use-case/url/update-a-url/interface';
+import { UpdateUrlRequest } from '@domain/use-case/url/update-a-url/request';
+import { logger } from '@infrastructure/logger';
 
 export class UpdateUrlController extends BaseHonoJSController {
   constructor(private readonly useCase: UpdateUrlUseCaseInterface) {
@@ -27,27 +28,22 @@ export class UpdateUrlController extends BaseHonoJSController {
       if (response.isSuccess()) {
         const urlEntity = response.getData();
         if (!urlEntity) {
-          throw new Error("URL not created");
+          throw new Error('URL not created');
         }
 
-        return this.sendSuccessResponse(
-          c,
-          "URL updated successfully",
-          {},
-          201
-        );
+        return this.sendSuccessResponse(c, 'URL updated successfully', {}, 201);
       }
 
       if (response.getErrors()) {
         for (const error of response.getErrors()) {
-          logger.error("Error creating URL", { error: error.message });
+          logger.error('Error creating URL', { error: error.message });
         }
         throw response.getErrors()[0];
       }
 
-      throw new Error("Unknown error occurred");
+      throw new Error('Unknown error occurred');
     } catch (error) {
-      return this.handleControllerError(error, c, "CreateUrlController");
+      return this.handleControllerError(error, c, 'CreateUrlController');
     }
   }
 }

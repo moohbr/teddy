@@ -1,7 +1,7 @@
-import { ShortId } from "@domain/entities/url/value-objects/short-id";
+import { ShortId } from '@domain/entities/url/value-objects/short-id';
 
 export class FindUrlByShortIdRequest {
-  constructor(private readonly shortId: ShortId) { }
+  constructor(private readonly shortId: ShortId) {}
 
   public getShortId(): ShortId {
     return this.shortId;

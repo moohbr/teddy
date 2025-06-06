@@ -1,4 +1,4 @@
-import { HttpError } from "@base/errors/http-error";
+import { HttpError } from '@base/errors/http-error';
 
 export class InvalidCredentialsError extends HttpError {
   constructor(message: string) {

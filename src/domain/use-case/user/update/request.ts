@@ -1,7 +1,7 @@
-import { UserEmail } from "@domain/entities/user/value-objects/email";
-import { UserId } from "@domain/entities/user/value-objects/id";
-import { UserName } from "@domain/entities/user/value-objects/name";
-import { UserPassword } from "@domain/entities/user/value-objects/password";
+import { UserEmail } from '@domain/entities/user/value-objects/email';
+import { UserId } from '@domain/entities/user/value-objects/id';
+import { UserName } from '@domain/entities/user/value-objects/name';
+import { UserPassword } from '@domain/entities/user/value-objects/password';
 
 export class UpdateUserRequest {
   constructor(
@@ -11,7 +11,12 @@ export class UpdateUserRequest {
     private readonly password?: UserPassword,
   ) {}
 
-  public static create(id: UserId, name?: UserName, email?: UserEmail, password?: UserPassword): UpdateUserRequest {
+  public static create(
+    id: UserId,
+    name?: UserName,
+    email?: UserEmail,
+    password?: UserPassword,
+  ): UpdateUserRequest {
     return new UpdateUserRequest(id, name, email, password);
   }
 

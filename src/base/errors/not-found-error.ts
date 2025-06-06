@@ -1,9 +1,9 @@
-import { HttpError } from "./http-error";
+import { HttpError } from './http-error';
 
 export abstract class NotFoundError extends HttpError {
   constructor(message: string) {
     super(message);
-    this.name = "NotFoundError";
+    this.name = 'NotFoundError';
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 

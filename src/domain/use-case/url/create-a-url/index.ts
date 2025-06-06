@@ -1,17 +1,18 @@
-import type { URLRepositoryInterface } from "@domain/entities/url/repositories";
-import { logger } from "@infrastructure/logger";
-import { CreateUrlResponse } from "./response";
-import type { CreateUrlRequest } from "./request";
-import type { CreateUrlUseCaseInterface } from "./interfaces";
-import { ValidationError } from "@base/errors/validation-error";
-import { UserRepositoryInterface } from "@domain/entities/user/repositories/interfaces";
-import { UserNotFoundError } from "@domain/entities/user/errors/not-found";
+import { ValidationError } from '@base/errors/validation-error';
+import type { URLRepositoryInterface } from '@domain/entities/url/repositories';
+import { UserNotFoundError } from '@domain/entities/user/errors/not-found';
+import { UserRepositoryInterface } from '@domain/entities/user/repositories/interfaces';
+import { logger } from '@infrastructure/logger';
+
+import type { CreateUrlUseCaseInterface } from './interfaces';
+import type { CreateUrlRequest } from './request';
+import { CreateUrlResponse } from './response';
 
 export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
   constructor(
     private readonly urlRepository: URLRepositoryInterface,
     private readonly userRepository: UserRepositoryInterface,
-  ) { }
+  ) {}
 
   public async execute(request: CreateUrlRequest): Promise<CreateUrlResponse> {
     const originalUrl = request.getOriginalUrl();
@@ -19,16 +20,18 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
     const userId = request.getUserId();
 
     if (userId) {
-      logger.info("Checking if user exists", {
+      logger.info('Checking if user exists', {
         userId: userId,
       });
       const user = await this.userRepository.findById(userId);
       if (!user) {
-        return CreateUrlResponse.failure("User not found", [new UserNotFoundError("User not found")]);
+        return CreateUrlResponse.failure('User not found', [
+          new UserNotFoundError('User not found'),
+        ]);
       }
     }
 
-    logger.info("Starting URL creation process", {
+    logger.info('Starting URL creation process', {
       originalUrl: originalUrlValue,
       userId: userId,
     });
@@ -37,8 +40,9 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
       const parsedUrl = this.parseAndValidateUrl(originalUrlValue.toString());
 
       if (this.isCircularRedirection(parsedUrl)) {
-        const message = "Circular redirection detected. Cannot shorten URLs pointing to this service.";
-        logger.warn("Circular redirection attempt", {
+        const message =
+          'Circular redirection detected. Cannot shorten URLs pointing to this service.';
+        logger.warn('Circular redirection attempt', {
           originalUrl: originalUrlValue,
           targetHost: parsedUrl.hostname,
           targetPort: parsedUrl.port,
@@ -46,18 +50,18 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
         return CreateUrlResponse.failure(message, [new ValidationError(message)]);
       }
 
-      logger.debug("Creating new URL entity");
+      logger.debug('Creating new URL entity');
       const newUrlEntity = await this.urlRepository.create(originalUrl, userId);
 
-      logger.info("URL created successfully", {
+      logger.info('URL created successfully', {
         shortId: newUrlEntity.getShortId().getValue(),
         originalUrl: newUrlEntity.getOriginalUrl().getValue(),
       });
 
       return CreateUrlResponse.success(newUrlEntity);
     } catch (error) {
-      logger.error("Error during URL creation", {
-        error: error instanceof Error ? error.message : "Unknown error",
+      logger.error('Error during URL creation', {
+        error: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
         originalUrl: originalUrlValue,
       });
@@ -70,7 +74,7 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
     try {
       return new URL(urlString);
     } catch (error) {
-      throw new ValidationError("Invalid URL format provided");
+      throw new ValidationError('Invalid URL format provided');
     }
   }
 
@@ -79,14 +83,14 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
     const appPort = process.env.APP_PORT;
 
     if (!appHost || !appPort) {
-      logger.warn("APP_HOST or APP_PORT environment variables not set");
+      logger.warn('APP_HOST or APP_PORT environment variables not set');
       return false;
     }
 
     const targetHost = parsedUrl.hostname;
     const targetPort = parsedUrl.port || this.getDefaultPort(parsedUrl.protocol);
 
-    logger.debug("Checking for circular redirection", {
+    logger.debug('Checking for circular redirection', {
       appHost,
       appPort,
       targetHost,
@@ -128,8 +132,8 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
       return CreateUrlResponse.failure(error.message, [error]);
     }
 
-    const message = "Houve um erro ao criar a URL encurtada";
-    const errors = error instanceof Error ? [error] : [new Error("Unknown error occurred")];
+    const message = 'Houve um erro ao criar a URL encurtada';
+    const errors = error instanceof Error ? [error] : [new Error('Unknown error occurred')];
 
     return CreateUrlResponse.failure(message, errors);
   }

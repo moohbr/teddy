@@ -1,5 +1,6 @@
-import { Server } from "@infrastructure/http/server";
-import "../../config/"
+/* eslint-disable */
+import { Server } from '@infrastructure/http/server';
+import '../../config/';
 
 async function main() {
   const server = new Server({

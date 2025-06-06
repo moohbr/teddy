@@ -1,6 +1,7 @@
-import { BaseRouter } from "@base/infrastructure/honojs/router";
-import { AuthMiddleware } from "@infrastructure/http/middlewares/auth";
-import type { Context } from "hono";
+import type { Context } from 'hono';
+
+import { BaseRouter } from '@base/infrastructure/honojs/router';
+import { AuthMiddleware } from '@infrastructure/http/middlewares/auth';
 
 export class UrlRouter extends BaseRouter {
   private static instance: UrlRouter;
@@ -8,7 +9,7 @@ export class UrlRouter extends BaseRouter {
 
   constructor() {
     super();
-    this.authMiddleware = this.container.get("AuthMiddleware");
+    this.authMiddleware = this.container.get('AuthMiddleware');
     this.setupRoutes();
   }
 
@@ -27,62 +28,38 @@ export class UrlRouter extends BaseRouter {
   }
 
   private setupCreateUrlRoute(): void {
-    this.router.post(
-      "/",
-      this.authMiddleware.handle,
-      this.handleCreateUrl.bind(this)
-    );
+    this.router.post('/', this.authMiddleware.handle, this.handleCreateUrl.bind(this));
   }
 
   private async handleCreateUrl(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "CreateUrlController"
-    );
+    const controller = this.container.get('CreateUrlController');
     return await controller.handle(c);
   }
 
   private setupGetAllByUserIdRoute(): void {
-    this.router.get(
-      "/",
-      this.authMiddleware.handle,
-      this.handleGetAllByUserId.bind(this)
-    );
+    this.router.get('/', this.authMiddleware.handle, this.handleGetAllByUserId.bind(this));
   }
 
   private async handleGetAllByUserId(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "GetAllByUserIdController"
-    );
+    const controller = this.container.get('GetAllByUserIdController');
     return await controller.handle(c);
   }
 
   private setupUpdateUrlRoute(): void {
-    this.router.put(
-      "/:shortId",
-      this.authMiddleware.handle,
-      this.handleUpdateUrl.bind(this)
-    );
+    this.router.put('/:shortId', this.authMiddleware.handle, this.handleUpdateUrl.bind(this));
   }
 
   private async handleUpdateUrl(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "UpdateUrlController"
-    );
+    const controller = this.container.get('UpdateUrlController');
     return await controller.handle(c);
   }
 
   private setupDeleteUrlRoute(): void {
-    this.router.delete(
-      "/:shortId",
-      this.authMiddleware.handle,
-      this.handleDeleteUrl.bind(this)
-    );
+    this.router.delete('/:shortId', this.authMiddleware.handle, this.handleDeleteUrl.bind(this));
   }
 
   private async handleDeleteUrl(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "DeleteUrlController"
-    );
+    const controller = this.container.get('DeleteUrlController');
     return await controller.handle(c);
   }
 }

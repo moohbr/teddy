@@ -1,9 +1,10 @@
-import type { Context } from "hono";
-import { logger } from "@infrastructure/logger";
-import { BaseHonoJSController } from "@base/infrastructure/honojs/controller";
-import { DeleteByShortIdUseCaseInterface } from "@domain/use-case/url/delete-by-short-id/interface";
-import { DeleteByShortIdRequest } from "@domain/use-case/url/delete-by-short-id/request";
-import { NotAuthorizedError } from "@base/errors/not-authorized-error";
+import type { Context } from 'hono';
+
+import { NotAuthorizedError } from '@base/errors/not-authorized-error';
+import { BaseHonoJSController } from '@base/infrastructure/honojs/controller';
+import { DeleteByShortIdUseCaseInterface } from '@domain/use-case/url/delete-by-short-id/interface';
+import { DeleteByShortIdRequest } from '@domain/use-case/url/delete-by-short-id/request';
+import { logger } from '@infrastructure/logger';
 
 export class DeleteUrlController extends BaseHonoJSController {
   constructor(private readonly useCase: DeleteByShortIdUseCaseInterface) {
@@ -23,24 +24,19 @@ export class DeleteUrlController extends BaseHonoJSController {
       const response = await this.useCase.execute(request);
 
       if (response.isSuccess()) {
-        return this.sendSuccessResponse(
-          c,
-          "URL deleted successfully",
-          {},
-          201
-        );
+        return this.sendSuccessResponse(c, 'URL deleted successfully', {}, 201);
       }
 
       if (response.getErrors()) {
         for (const error of response.getErrors()) {
-          logger.error("Error creating URL", { error: error.message });
+          logger.error('Error creating URL', { error: error.message });
         }
         throw response.getErrors()[0];
       }
 
-      throw new Error("Unknown error occurred");
+      throw new Error('Unknown error occurred');
     } catch (error) {
-      return this.handleControllerError(error, c, "CreateUrlController");
+      return this.handleControllerError(error, c, 'CreateUrlController');
     }
   }
 }

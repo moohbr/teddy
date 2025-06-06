@@ -1,7 +1,8 @@
-import { AuthServiceInterface } from "./interfaces";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { TokenPayload } from "./types";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+import { AuthServiceInterface } from './interfaces';
+import { TokenPayload } from './types';
 
 export class AuthService implements AuthServiceInterface {
   private readonly jwtSecret: string;
@@ -9,7 +10,7 @@ export class AuthService implements AuthServiceInterface {
 
   constructor() {
     this.jwtSecret = process.env.JWT_SECRET;
-    this.jwtExpiresIn = "1h";
+    this.jwtExpiresIn = '1h';
   }
 
   public async hashPassword(raw: string): Promise<string> {
@@ -20,8 +21,8 @@ export class AuthService implements AuthServiceInterface {
     return bcrypt.compare(raw, hash);
   }
 
-  public generateToken(user: TokenPayload["user"]): string {
-    return jwt.sign({ user }, this.jwtSecret, { 
+  public generateToken(user: TokenPayload['user']): string {
+    return jwt.sign({ user }, this.jwtSecret, {
       expiresIn: this.jwtExpiresIn,
     });
   }

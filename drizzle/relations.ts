@@ -1,3 +1,3 @@
-import { relations } from "drizzle-orm/relations";
-import {  } from "./schema";
-
+/* eslint-disable */
+import { relations } from 'drizzle-orm/relations';
+import {} from './schema';

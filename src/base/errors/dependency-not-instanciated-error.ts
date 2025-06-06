@@ -1,4 +1,4 @@
-import { HttpError } from "./http-error";
+import { HttpError } from './http-error';
 
 export class DependencyInstanciatedError extends HttpError {
   constructor(dependencyName: string) {

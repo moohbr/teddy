@@ -1,8 +1,11 @@
-import { OriginalUrl } from "@domain/entities/url/value-objects/original-url";
-import { UserId } from "@domain/entities/user/value-objects/id";
+import { OriginalUrl } from '@domain/entities/url/value-objects/original-url';
+import { UserId } from '@domain/entities/user/value-objects/id';
 
 export class CreateUrlRequest {
-  constructor(private readonly originalUrl: OriginalUrl, private readonly userId?: UserId) { }
+  constructor(
+    private readonly originalUrl: OriginalUrl,
+    private readonly userId?: UserId,
+  ) {}
 
   public getOriginalUrl(): OriginalUrl {
     return this.originalUrl;

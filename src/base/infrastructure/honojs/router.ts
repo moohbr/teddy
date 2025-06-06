@@ -1,6 +1,7 @@
-import { DIContainer } from "@infrastructure/di";
-import { AuthMiddleware } from "@infrastructure/http/middlewares/auth";
-import { Hono } from "hono";
+import { Hono } from 'hono';
+
+import { DIContainer } from '@infrastructure/di';
+import { AuthMiddleware } from '@infrastructure/http/middlewares/auth';
 
 export abstract class BaseRouter {
   protected router: Hono;
@@ -10,7 +11,7 @@ export abstract class BaseRouter {
   constructor() {
     this.router = new Hono();
     this.container = DIContainer.getInstance();
-    this.authMiddleware = this.container.get("AuthMiddleware");
+    this.authMiddleware = this.container.get('AuthMiddleware');
     this.setupRoutes();
   }
 

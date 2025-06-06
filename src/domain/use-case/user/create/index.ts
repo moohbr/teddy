@@ -1,25 +1,21 @@
-import { logger } from "@infrastructure/logger";
-import { CreateUserRequest } from "@domain/use-case/user/create/request";
-import { CreateUserResponse } from "@domain/use-case/user/create/response";
-import { CreateUserUseCaseInterface } from "@domain/use-case/user/create/interfaces";
-import { UserRepositoryInterface } from "@domain/entities/user/repositories/interfaces";
-import { UserEntity } from "@domain/entities/user/entity";
-import { UserAlreadyExistsError } from "@domain/entities/user/errors/already-existits";
+import { UserEntity } from '@domain/entities/user/entity';
+import { UserAlreadyExistsError } from '@domain/entities/user/errors/already-existits';
+import { UserRepositoryInterface } from '@domain/entities/user/repositories/interfaces';
+import { CreateUserUseCaseInterface } from '@domain/use-case/user/create/interfaces';
+import { CreateUserRequest } from '@domain/use-case/user/create/request';
+import { CreateUserResponse } from '@domain/use-case/user/create/response';
+import { logger } from '@infrastructure/logger';
 
 export class CreateUserUseCase implements CreateUserUseCaseInterface {
-  constructor(
-    private readonly userRepository: UserRepositoryInterface,
-  ) { }
+  constructor(private readonly userRepository: UserRepositoryInterface) {}
 
-  public async execute(
-    request: CreateUserRequest,
-  ): Promise<CreateUserResponse> {
+  public async execute(request: CreateUserRequest): Promise<CreateUserResponse> {
     try {
-      logger.info("Starting user creation process");
+      logger.info('Starting user creation process');
 
       const userExists = await this.userRepository.findByEmail(request.getEmail());
       if (userExists) {
-        throw new UserAlreadyExistsError("User already exists");
+        throw new UserAlreadyExistsError('User already exists');
       }
 
       const newUser = UserEntity.create({
@@ -32,8 +28,8 @@ export class CreateUserUseCase implements CreateUserUseCaseInterface {
 
       return CreateUserResponse.success(newUser);
     } catch (error) {
-      logger.error("Error during user creation", {
-        error: error instanceof Error ? error.message : "Unknown error",
+      logger.error('Error during user creation', {
+        error: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
       });
 
@@ -42,8 +38,8 @@ export class CreateUserUseCase implements CreateUserUseCaseInterface {
   }
 
   private handleError(error: unknown): CreateUserResponse {
-    const message = error instanceof Error ? error.message : "Unknown error occurred";
+    const message = error instanceof Error ? error.message : 'Unknown error occurred';
     const errors = error instanceof Error ? [error] : [new Error(message)];
-    return CreateUserResponse.failure("Houve um erro ao criar o usuário", errors);
+    return CreateUserResponse.failure('Houve um erro ao criar o usuário', errors);
   }
 }

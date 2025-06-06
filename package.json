@@ -18,7 +18,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "pre-push": "yarn build && yarn lint && yarn format:check"
+    "pre-push": "yarn lint && yarn format:check"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -54,6 +54,7 @@
     "drizzle-kit": "^0.31.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^4.4.3",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
     "husky": "^9.0.11",

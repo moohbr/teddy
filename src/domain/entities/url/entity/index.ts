@@ -1,26 +1,23 @@
-import { Entity } from "../../../../base/domain/entity/entity.js";
-import { ShortId } from "../value-objects/short-id.js";
-import { OriginalUrl } from "../value-objects/original-url.js";
-import type { URLRawEntity } from "./types.js";
-import { UserId } from "@domain/entities/user/value-objects/id.js";
+import { UserId } from '@domain/entities/user/value-objects/id.js';
+
+import type { URLRawEntity } from './types.js';
+import { Entity } from '../../../../base/domain/entity/entity.js';
+import { OriginalUrl } from '../value-objects/original-url.js';
+import { ShortId } from '../value-objects/short-id.js';
 
 export class URLEntity extends Entity<URLRawEntity> {
-  private constructor(
-    props: URLRawEntity,
-  ) {
+  private constructor(props: URLRawEntity) {
     super(props);
   }
 
-  public static create(props: Pick<URLRawEntity, "originalUrl" | "userId">): URLEntity {
-    return new URLEntity(
-      {
-        shortId: ShortId.create(),
-        originalUrl: props.originalUrl,
-        userId: props.userId,
-        active: true,
-        count: 0,
-      }
-    );
+  public static create(props: Pick<URLRawEntity, 'originalUrl' | 'userId'>): URLEntity {
+    return new URLEntity({
+      shortId: ShortId.create(),
+      originalUrl: props.originalUrl,
+      userId: props.userId,
+      active: true,
+      count: 0,
+    });
   }
 
   public toPersistence(): URLRawEntity {

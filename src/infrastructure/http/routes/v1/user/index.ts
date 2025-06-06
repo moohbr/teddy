@@ -1,5 +1,6 @@
-import { BaseRouter } from "@base/infrastructure/honojs/router";
-import type { Context } from "hono";
+import type { Context } from 'hono';
+
+import { BaseRouter } from '@base/infrastructure/honojs/router';
 
 export class UserRouter extends BaseRouter {
   private static instance: UserRouter;
@@ -19,62 +20,40 @@ export class UserRouter extends BaseRouter {
   }
 
   private setupCreateUserRoute(): void {
-    this.router.post(
-      "/",
-      this.handleCreateUser.bind(this)
-    );
+    this.router.post('/', this.handleCreateUser.bind(this));
   }
 
   private async handleCreateUser(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "CreateUserController"
-    );
+    const controller = this.container.get('CreateUserController');
     return await controller.handle(c);
   }
 
   private setupUpdateUserRoute(): void {
-    const authMiddleware = this.container.get("AuthMiddleware");
-    this.router.put(
-      "/",
-      authMiddleware.handle,
-      this.handleUpdateUser.bind(this)
-    );
+    const authMiddleware = this.container.get('AuthMiddleware');
+    this.router.put('/', authMiddleware.handle, this.handleUpdateUser.bind(this));
   }
 
   private async handleUpdateUser(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "UpdateUserController"
-    );
+    const controller = this.container.get('UpdateUserController');
     return await controller.handle(c);
   }
 
   private setupDeleteUserRoute(): void {
-    const authMiddleware = this.container.get("AuthMiddleware");
-    this.router.delete(
-      "/:id",
-      authMiddleware.handle,
-      this.handleDeleteUser.bind(this)
-    );
+    const authMiddleware = this.container.get('AuthMiddleware');
+    this.router.delete('/:id', authMiddleware.handle, this.handleDeleteUser.bind(this));
   }
 
   private async handleDeleteUser(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "DeleteUserController"
-    );
+    const controller = this.container.get('DeleteUserController');
     return await controller.handle(c);
   }
 
   private setupLoginUserRoute(): void {
-    this.router.post(
-      "/login",
-      this.handleLoginUser.bind(this)
-    );
+    this.router.post('/login', this.handleLoginUser.bind(this));
   }
 
   private async handleLoginUser(c: Context): Promise<Response> {
-    const controller = this.container.get(
-      "LoginUserController"
-    );
+    const controller = this.container.get('LoginUserController');
     return await controller.handle(c);
   }
 }

@@ -1,5 +1,5 @@
-import { UserSchemas } from "@domain/entities/user/schemas";
-import { ValueObject } from "@base/domain/entity/value-object";
+import { ValueObject } from '@base/domain/entity/value-object';
+import { UserSchemas } from '@domain/entities/user/schemas';
 
 export class UserId extends ValueObject<string> {
   public static create(value: unknown): UserId {

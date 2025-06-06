@@ -1,6 +1,6 @@
-import { UserEntity } from "../entity";
-import { UserEmail } from "../value-objects/email";
-import { UserId } from "../value-objects/id";
+import { UserEntity } from '../entity';
+import { UserEmail } from '../value-objects/email';
+import { UserId } from '../value-objects/id';
 
 export interface UserRepositoryInterface {
   create(user: UserEntity): Promise<UserEntity>;

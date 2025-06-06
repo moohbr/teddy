@@ -1,6 +1,6 @@
-import { UserName } from "@domain/entities/user/value-objects/name";
-import { UserEmail } from "@domain/entities/user/value-objects/email";
-import { UserPassword } from "@domain/entities/user/value-objects/password";
+import { UserEmail } from '@domain/entities/user/value-objects/email';
+import { UserName } from '@domain/entities/user/value-objects/name';
+import { UserPassword } from '@domain/entities/user/value-objects/password';
 
 export class CreateUserRequest {
   constructor(
@@ -27,5 +27,4 @@ export class CreateUserRequest {
   public getPassword(): UserPassword {
     return this.password;
   }
-
 }

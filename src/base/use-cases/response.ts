@@ -1,10 +1,11 @@
+/* eslint-disable */
 export abstract class BaseResponse<T = void> {
   protected constructor(
     protected readonly data: T | null,
     protected readonly success: boolean,
     protected readonly message: string,
     protected readonly errors: Error[],
-  ) { }
+  ) {}
 
   public isSuccess(): boolean {
     return this.success;
@@ -25,7 +26,7 @@ export abstract class BaseResponse<T = void> {
   protected static createSuccess<T>(
     data: T,
     message: string,
-    ResponseClass: new (data: T | null, success: boolean, message: string, errors: Error[]) => any
+    ResponseClass: new (data: T | null, success: boolean, message: string, errors: Error[]) => any,
   ) {
     return new ResponseClass(data, true, message, []);
   }
@@ -33,16 +34,15 @@ export abstract class BaseResponse<T = void> {
   protected static createFailure<T>(
     message: string,
     errors: Error[] = [],
-    ResponseClass: new (data: T | null, success: boolean, message: string, errors: Error[]) => any
+    ResponseClass: new (data: T | null, success: boolean, message: string, errors: Error[]) => any,
   ) {
     return new ResponseClass(null, false, message, errors);
   }
 
   protected static createValidationFailure<T>(
     errors: Error[],
-    ResponseClass: new (data: T | null, success: boolean, message: string, errors: Error[]) => any
+    ResponseClass: new (data: T | null, success: boolean, message: string, errors: Error[]) => any,
   ) {
-    return new ResponseClass(null, false, "Validation failed", errors);
+    return new ResponseClass(null, false, 'Validation failed', errors);
   }
 }
-

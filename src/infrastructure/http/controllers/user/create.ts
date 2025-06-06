@@ -1,8 +1,9 @@
-import { BaseHonoJSController } from "@base/infrastructure/honojs/controller";
-import { CreateUserUseCaseInterface } from "@domain/use-case/user/create/interfaces";
-import { CreateUserRequest } from "@domain/use-case/user/create/request";
-import { Context } from "hono";
-        
+import { Context } from 'hono';
+
+import { BaseHonoJSController } from '@base/infrastructure/honojs/controller';
+import { CreateUserUseCaseInterface } from '@domain/use-case/user/create/interfaces';
+import { CreateUserRequest } from '@domain/use-case/user/create/request';
+
 export class CreateUserController extends BaseHonoJSController {
   constructor(private readonly createUserUseCase: CreateUserUseCaseInterface) {
     super();
@@ -21,7 +22,7 @@ export class CreateUserController extends BaseHonoJSController {
 
       return c.json({ error: response.getErrors() }, 400);
     } catch (error) {
-      return this.handleControllerError(error, c, "CreateUserController");
+      return this.handleControllerError(error, c, 'CreateUserController');
     }
   }
 }

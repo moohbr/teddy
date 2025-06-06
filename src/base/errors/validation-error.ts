@@ -1,4 +1,4 @@
-import { HttpError } from "./http-error";
+import { HttpError } from './http-error';
 
 export class ValidationError extends HttpError {
   constructor(message: string) {
@@ -9,4 +9,4 @@ export class ValidationError extends HttpError {
   public getStatusCode(): number {
     return 400;
   }
-} 
+}

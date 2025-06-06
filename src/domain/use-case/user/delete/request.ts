@@ -1,4 +1,4 @@
-import { UserId } from "@domain/entities/user/value-objects/id";
+import { UserId } from '@domain/entities/user/value-objects/id';
 
 export class DeleteUserRequest {
   constructor(private readonly id: UserId) {}

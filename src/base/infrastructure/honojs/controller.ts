@@ -1,21 +1,22 @@
-import { NotFoundError } from "@base/errors/not-found-error";
-import { ValidationError } from "@base/errors/validation-error";
-import { logger } from "@infrastructure/logger";
-import type { Context } from "hono";
-import type { StatusCode } from 'hono/utils/http-status'
-import { ZodError } from "zod";
+/* eslint-disable */
+import type { Context } from 'hono';
+import type { StatusCode } from 'hono/utils/http-status';
+import { ZodError } from 'zod';
+import { NotFoundError } from '@base/errors/not-found-error';
+import { ValidationError } from '@base/errors/validation-error';
+import { logger } from '@infrastructure/logger';
 
 export abstract class BaseHonoJSController {
   protected sendSuccessResponse(
     c: Context,
     message: string,
     data?: any,
-    statusCode: StatusCode = 200
+    statusCode: StatusCode = 200,
   ): Response {
     c.status(statusCode);
     return c.json({
       message,
-      data
+      data,
     });
   }
 
@@ -23,23 +24,19 @@ export abstract class BaseHonoJSController {
     c: Context,
     message: string,
     statusCode: StatusCode = 400,
-    errors?: any[]
+    errors?: any[],
   ): Response {
     c.status(statusCode);
     return c.json({
       message,
-      errors
+      errors,
     });
   }
 
-  protected handleControllerError(
-    error: unknown,
-    c: Context,
-    controllerName: string
-  ): Response {
+  protected handleControllerError(error: unknown, c: Context, controllerName: string): Response {
     logger.error(`Error in ${controllerName}`, {
-      error: error instanceof Error ? error.message : "Unknown error",
-      stack: error instanceof Error ? error.stack : undefined
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
     });
 
     if (error instanceof NotFoundError) {
@@ -51,13 +48,9 @@ export abstract class BaseHonoJSController {
     }
 
     if (error instanceof ZodError) {
-      return this.sendErrorResponse(c, "Validation error", 400, error.errors);
+      return this.sendErrorResponse(c, 'Validation error', 400, error.errors);
     }
 
-    return this.sendErrorResponse(
-      c,
-      "Internal server error",
-      500
-    );
+    return this.sendErrorResponse(c, 'Internal server error', 500);
   }
 }

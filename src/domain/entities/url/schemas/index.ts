@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export class URLSchema {
   public static readonly originalUrl = z.string().url();

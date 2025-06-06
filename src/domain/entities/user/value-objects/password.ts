@@ -1,6 +1,7 @@
-import { UserSchemas } from "@domain/entities/user/schemas/index.js";
-import { ValueObject } from "@base/domain/entity/value-object.js";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
+
+import { ValueObject } from '@base/domain/entity/value-object.js';
+import { UserSchemas } from '@domain/entities/user/schemas/index.js';
 
 export class UserPassword extends ValueObject<string> {
   public static create(value: unknown): UserPassword {

@@ -1,5 +1,5 @@
-import { UserEmail } from "@domain/entities/user/value-objects/email";
-import { UserPassword } from "@domain/entities/user/value-objects/password";
+import { UserEmail } from '@domain/entities/user/value-objects/email';
+import { UserPassword } from '@domain/entities/user/value-objects/password';
 
 export class LoginRequest {
   private readonly email: UserEmail;
@@ -11,10 +11,7 @@ export class LoginRequest {
   }
 
   public static create(email: string, password: string): LoginRequest {
-    return new LoginRequest(
-      UserEmail.create(email),
-      UserPassword.create(password)
-    );
+    return new LoginRequest(UserEmail.create(email), UserPassword.create(password));
   }
 
   public getEmail(): UserEmail {
