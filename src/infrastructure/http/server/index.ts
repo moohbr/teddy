@@ -6,6 +6,8 @@ import { logger } from "hono/logger";
 import { logger as winston } from "@infrastructure/logger";
 import { DIContainer } from "@infrastructure/di";
 import { db } from "@infrastructure/datasource/databases/drizzle";
+import { swaggerUI } from '@hono/swagger-ui'
+import { swaggerConfig } from "../swagger";
 
 export class Server implements IServer {
   public readonly app: Hono;
@@ -24,6 +26,7 @@ export class Server implements IServer {
     this.setupRoutes();
     serve({ fetch: this.app.fetch, port: this.config.port, hostname: this.config.address })
     winston.info(`Server started at http://${this.config.address}:${this.config.port}`);
+    winston.info(`Swagger UI available at http://${this.config.address}:${this.config.port}/docs`);
   }
 
   private setupMiddlewares(): void {
@@ -40,6 +43,11 @@ export class Server implements IServer {
 
   }
   private setupRoutes(): void {
+    this.app.use('/docs', swaggerUI({ url: '/docs/swagger.json' }))
+    this.app.get('/docs/swagger.json', (c) => {
+      return c.json(swaggerConfig)
+    })
+
     V1Router.getInstance().registerWith(this.app, "/v1");
     this.app.get('/:shortId', async (c) => {
       const controller = this.container.get("RedirectUrlController");
