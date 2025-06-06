@@ -12,8 +12,8 @@ export class CreateUrlController extends BaseHonoJSController {
   async handle(c: Context): Promise<Response> {
     try {
       const body = await c.req.json();
-
-      const request = CreateUrlRequest.create(body.originalUrl);
+      const userId = c.get("userId");
+      const request = CreateUrlRequest.create(body.originalUrl, userId);
       const response = await this.useCase.execute(request);
 
       if (response.isSuccess()) {

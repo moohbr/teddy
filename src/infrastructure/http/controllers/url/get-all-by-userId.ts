@@ -11,7 +11,7 @@ export class GetAllByUserIdController extends BaseHonoJSController {
 
   async handle(c: Context): Promise<Response> {
     try {
-      const userId = c.req.param("userId");
+      const userId = c.get("userId");
       const request = GetAllByUserIdRequest.create(userId);
       const response = await this.useCase.execute(request);
 

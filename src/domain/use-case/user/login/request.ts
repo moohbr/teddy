@@ -10,10 +10,10 @@ export class LoginRequest {
     this.password = password;
   }
 
-  public static create(email: UserEmail, password: UserPassword): LoginRequest {
+  public static create(email: string, password: string): LoginRequest {
     return new LoginRequest(
-      email,
-      password
+      UserEmail.create(email),
+      UserPassword.create(password)
     );
   }
 

@@ -24,6 +24,7 @@ export class UserRepository implements UserRepositoryInterface {
       name: persistenceData.name.getValue(),
       email: persistenceData.email.getValue(),
       password: persistenceData.passwordHash.getValue(),
+      active: true,
     });
 
     return userEntity;
@@ -33,7 +34,7 @@ export class UserRepository implements UserRepositoryInterface {
     const [user] = await this.db
       .select()
       .from(usersTable)
-      .where(and(eq(usersTable.email, email.toString()), eq(usersTable.active, true)))
+      .where(and(eq(usersTable.email, email.getValue()), eq(usersTable.active, true)))
       .limit(1);
 
     if (!user) return null;
@@ -43,7 +44,7 @@ export class UserRepository implements UserRepositoryInterface {
       user.name,
       user.email,
       user.createdAt,
-      UserPassword.create(user.password).hash()
+      user.password
     );
   }
 
@@ -61,7 +62,7 @@ export class UserRepository implements UserRepositoryInterface {
       user.name,
       user.email,
       user.createdAt,
-      UserPassword.create(user.password).hash()
+      user.password
     );
   }
 
@@ -86,7 +87,7 @@ export class UserRepository implements UserRepositoryInterface {
       userData.name,
       userData.email,
       userData.createdAt,
-      UserPassword.create(userData.password).hash()
+      userData.password
     );
   }
 

@@ -3,6 +3,7 @@ import { AuthServiceInterface } from "@domain/services/auth/interfaces";
 import { NotAuthorizedError } from "@base/errors/not-authorized-error";
 import { BaseHonoJSController } from "@base/infrastructure/honojs/controller";
 import { StatusCode } from "hono/utils/http-status";
+import { logger } from "@infrastructure/logger";
 
 export class AuthMiddleware extends BaseHonoJSController {
   public readonly handle: (c: Context, next: Next) => Promise<Response | void>;
@@ -23,11 +24,19 @@ export class AuthMiddleware extends BaseHonoJSController {
       const token = authHeader.split(" ")[1];
       const payload = this.authService.verifyToken(token);
 
+      const route = c.req.path;
+      // Exclusive POST /v1/url route does not require authentication
+      if (route.includes("/url") && c.req.method === "POST") {
+        logger.info("Skipping authentication for POST /v1/url route");
+        c.set("userId", payload.user.id);
+        await next();
+        return;
+      }
+
       if (!payload.user?.id) {
         throw new NotAuthorizedError("Invalid token payload");
       }
 
-      // Set the userId in the context for downstream use
       c.set("userId", payload.user.id);
 
       await next();

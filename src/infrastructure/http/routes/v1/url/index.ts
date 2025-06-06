@@ -1,11 +1,15 @@
 import { BaseRouter } from "@base/infrastructure/honojs/router";
+import { AuthMiddleware } from "@infrastructure/http/middlewares/auth";
 import type { Context } from "hono";
 
 export class UrlRouter extends BaseRouter {
   private static instance: UrlRouter;
+  private readonly authMiddleware: AuthMiddleware;
 
   constructor() {
     super();
+    this.authMiddleware = this.container.get("AuthMiddleware");
+    this.setupRoutes();
   }
 
   static getInstance(): UrlRouter {
@@ -25,6 +29,7 @@ export class UrlRouter extends BaseRouter {
   private setupCreateUrlRoute(): void {
     this.router.post(
       "/",
+      this.authMiddleware.handle,
       this.handleCreateUrl.bind(this)
     );
   }
@@ -37,10 +42,9 @@ export class UrlRouter extends BaseRouter {
   }
 
   private setupGetAllByUserIdRoute(): void {
-    const authMiddleware = this.container.get("AuthMiddleware");
     this.router.get(
       "/",
-      authMiddleware.handle,
+      this.authMiddleware.handle,
       this.handleGetAllByUserId.bind(this)
     );
   }
@@ -53,10 +57,9 @@ export class UrlRouter extends BaseRouter {
   }
 
   private setupUpdateUrlRoute(): void {
-    const authMiddleware = this.container.get("AuthMiddleware");
     this.router.put(
       "/:shortId",
-      authMiddleware.handle,
+      this.authMiddleware.handle,
       this.handleUpdateUrl.bind(this)
     );
   }
@@ -69,10 +72,9 @@ export class UrlRouter extends BaseRouter {
   }
 
   private setupDeleteUrlRoute(): void {
-    const authMiddleware = this.container.get("AuthMiddleware");
     this.router.delete(
       "/:shortId",
-      authMiddleware.handle,
+      this.authMiddleware.handle,
       this.handleDeleteUrl.bind(this)
     );
   }

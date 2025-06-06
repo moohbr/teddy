@@ -64,7 +64,8 @@ export class DIContainer {
 
   private registerUseCases(): void {
     this.register("CreateUrlUseCase", new CreateUrlUseCase(
-      this.get("UrlRepository")
+      this.get("UrlRepository"),
+      this.get("UserRepository")
     ));
     this.register("FindByShortIdUseCase", new FindUrlByShortIdUseCase(
       this.get("UrlRepository")

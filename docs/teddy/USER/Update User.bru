@@ -1,0 +1,21 @@
+meta {
+  name: Update User
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8080/v1/user
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiYTc4ZTJjYTAtNjc5MS00NTVhLTg5OTQtYzdjNzFjODlkY2Q4IiwibmFtZSI6Ik1hdGhldXMiLCJlbWFpbCI6Im1hdGhldXNAaW1haWwuY29tIn0sImlhdCI6MTc0OTIwNzg4NiwiZXhwIjoxNzQ5MjExNDg2fQ.fA1u5ZofgX1DpO13PRm8uBdUQvSRPUe6puslZ7LJgMY
+}
+
+body:json {
+  {
+    "name": "Matheus Araujo"
+  }
+}

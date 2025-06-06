@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 
 export class UserPassword extends ValueObject<string> {
   public static create(value: unknown): UserPassword {
-    const validated = UserSchemas.passwordSchema.parse(value);
+    const cleanValue = typeof value === 'string' ? value.replace(/^["'](.*)["']$/, '$1') : value;
+    const validated = UserSchemas.passwordSchema.parse(cleanValue);
     return new UserPassword(validated);
   }
 
@@ -12,11 +13,15 @@ export class UserPassword extends ValueObject<string> {
     return bcrypt.hashSync(this.value, 10);
   }
 
-  public compareWithHash(value: string): boolean {
-    return bcrypt.compareSync(value, this.value);
+  public compareWithHash(plainTextPassword: string): boolean {
+    return bcrypt.compareSync(plainTextPassword, this.value);
+  }
+
+  public compare(plainTextPassword: string): boolean {
+    return this.value === plainTextPassword;
   }
 
   public static reconstruct(value: string): UserPassword {
-    return this.create(value);
+    return new UserPassword(value);
   }
 }

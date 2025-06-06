@@ -13,14 +13,14 @@ export class UpdateUserController extends BaseHonoJSController {
   }
   async handle(c: Context): Promise<Response> {
     try {
-      const id = c.req.param("id");
+      const userId = c.get("userId");
       const body = await c.req.json();
 
       const request = UpdateUserRequest.create(
-        UserId.create(id), 
-        UserName.create(body.name), 
-        UserEmail.create(body.email), 
-        UserPassword.create(body.password)
+        UserId.create(userId),
+        body.name ? UserName.create(body.name) : undefined,
+        body.email ? UserEmail.create(body.email) : undefined,
+        body.password ? UserPassword.create(body.password) : undefined
     );
     
       const response = await this.updateUserUseCase.execute(request);

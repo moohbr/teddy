@@ -4,16 +4,33 @@ import { CreateUrlResponse } from "./response";
 import type { CreateUrlRequest } from "./request";
 import type { CreateUrlUseCaseInterface } from "./interfaces";
 import { ValidationError } from "@base/errors/validation-error";
+import { UserRepositoryInterface } from "@domain/entities/user/repositories/interfaces";
+import { UserNotFoundError } from "@domain/entities/user/errors/not-found";
 
 export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
-  constructor(private readonly urlRepository: URLRepositoryInterface) { }
+  constructor(
+    private readonly urlRepository: URLRepositoryInterface,
+    private readonly userRepository: UserRepositoryInterface,
+  ) { }
 
   public async execute(request: CreateUrlRequest): Promise<CreateUrlResponse> {
     const originalUrl = request.getOriginalUrl();
     const originalUrlValue = originalUrl.getValue();
+    const userId = request.getUserId();
+
+    if (userId) {
+      logger.info("Checking if user exists", {
+        userId: userId,
+      });
+      const user = await this.userRepository.findById(userId);
+      if (!user) {
+        return CreateUrlResponse.failure("User not found", [new UserNotFoundError("User not found")]);
+      }
+    }
 
     logger.info("Starting URL creation process", {
       originalUrl: originalUrlValue,
+      userId: userId,
     });
 
     try {
@@ -30,7 +47,7 @@ export class CreateUrlUseCase implements CreateUrlUseCaseInterface {
       }
 
       logger.debug("Creating new URL entity");
-      const newUrlEntity = await this.urlRepository.create(originalUrl);
+      const newUrlEntity = await this.urlRepository.create(originalUrl, userId);
 
       logger.info("URL created successfully", {
         shortId: newUrlEntity.getShortId().getValue(),

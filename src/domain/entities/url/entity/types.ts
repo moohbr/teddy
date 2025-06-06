@@ -7,4 +7,6 @@ export type URLRawEntity = {
     shortId: ShortId;
     originalUrl: OriginalUrl;
     userId?: UserId;
+    active: boolean;
+    count: number;
 }

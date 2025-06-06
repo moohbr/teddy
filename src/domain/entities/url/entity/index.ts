@@ -17,6 +17,8 @@ export class URLEntity extends Entity<URLRawEntity> {
         shortId: ShortId.create(),
         originalUrl: props.originalUrl,
         userId: props.userId,
+        active: true,
+        count: 0,
       }
     );
   }
@@ -39,6 +41,14 @@ export class URLEntity extends Entity<URLRawEntity> {
 
   public getUserId(): UserId | undefined {
     return this.props.userId;
+  }
+
+  public getActive(): boolean {
+    return this.props.active;
+  }
+
+  public getCount(): number {
+    return this.props.count;
   }
 
   public isOwner(userId: UserId): boolean {

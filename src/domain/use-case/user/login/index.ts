@@ -24,7 +24,7 @@ export class LoginUseCase implements LoginUseCaseInterface {
 
       logger.debug("User found, validating password", { userId: user.getId() });
 
-      const isValid = request.getPassword().compareWithHash(user.getPasswordHash().getValue());
+      const isValid = user.getPasswordHash().compare(request.getPassword().getValue());
 
       if (!isValid) {
         throw new InvalidCredentialsError("Invalid credentials");
@@ -38,7 +38,8 @@ export class LoginUseCase implements LoginUseCaseInterface {
       
       logger.info("Login successful", { 
         userId: user.getId(),
-        email: user.getEmail()
+        email: user.getEmail(),
+        token: token
       });
 
       return LoginResponse.success({

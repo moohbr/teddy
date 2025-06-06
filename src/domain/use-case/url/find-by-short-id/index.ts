@@ -28,9 +28,8 @@ export class FindUrlByShortIdUseCase implements FindUrlByShortIdUseCaseInterface
         throw error;
       }
 
-      // this.urlRepository.updateByShortId(urlEntity.getShortId(), {
-      //   count: urlEntity.getCount() + 1
-      // })
+      await this.urlRepository.incrementCountByShortId(urlEntity.getShortId());
+
       logger.info("URL found successfully", {
         shortId: urlEntity.getShortId().getValue(),
         originalUrl: urlEntity.getOriginalUrl().getValue()

@@ -15,7 +15,7 @@ export class UpdateUserUseCase implements UpdateUserUseCaseInterface {
     request: UpdateUserRequest,
   ): Promise<UpdateUserResponse> {
     try {
-      const userId = UserId.create(request.getId());
+      const userId = request.getId();
       logger.info("Starting user update process", { 
         userId: userId.getValue(),
         hasNameUpdate: request.getName() !== null,

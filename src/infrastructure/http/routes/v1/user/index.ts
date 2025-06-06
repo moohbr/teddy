@@ -35,7 +35,7 @@ export class UserRouter extends BaseRouter {
   private setupUpdateUserRoute(): void {
     const authMiddleware = this.container.get("AuthMiddleware");
     this.router.put(
-      "/:id",
+      "/",
       authMiddleware.handle,
       this.handleUpdateUser.bind(this)
     );
